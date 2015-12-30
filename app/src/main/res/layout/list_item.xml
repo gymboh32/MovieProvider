@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:text="@string/image"
+        android:id="@+id/list_item_movie"
+        android:gravity="center_vertical"
+        android:textAlignment="center"
+        tools:ignore="ContentDescription"/>
+
+</FrameLayout>

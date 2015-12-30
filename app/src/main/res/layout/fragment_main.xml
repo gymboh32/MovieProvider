@@ -4,8 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main_container"
-    tools:ignore="MergeRootFrame"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity$MainFragment">
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="auto_fit"
+        android:id="@+id/gridview_image"/>
 
 </FrameLayout>
