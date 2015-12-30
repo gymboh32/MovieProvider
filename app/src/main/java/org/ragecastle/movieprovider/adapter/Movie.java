@@ -5,9 +5,9 @@ package org.ragecastle.movieprovider.adapter;
  */
 public class Movie {
 
-    public String image;
     public String id;
     public String title;
+    public String image;
     public String releaseDate;
     public String avgRating;
     public String plot;
