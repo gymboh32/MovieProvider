@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.ragecastle.movieprovider.adapter.Movie;
 import org.ragecastle.movieprovider.adapter.MovieAdapter;
 import org.ragecastle.movieprovider.database.Contract;
+import org.ragecastle.movieprovider.database.DBHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -30,8 +32,11 @@ import java.util.Arrays;
  */
 public class MainFragment extends Fragment {
 
+    private final String LOG_TAG = MainFragment.class.getSimpleName();
     private MovieAdapter movieAdapter;
     private GridView gridView;
+    private ArrayList<Movie> list = new ArrayList<Movie>();
+    private DBHelper dbHelper;
 
     public MainFragment () {}
 
@@ -53,19 +58,24 @@ public class MainFragment extends Fragment {
         Movie[] movieArray = {
                 new Movie("id",
                         "title",
-                        "t90Y3G8UGQp0f0DrP60wRu9gfrH.jpg",
+                        "http://image.tmdb.org/t/p/w500/t90Y3G8UGQp0f0DrP60wRu9gfrH.jpg",
                         "release_date",
                         "average_rating",
                         "plot")
         };
 
         gridView = (GridView) rootView.findViewById(R.id.gridview_image);
+        fillGrid(movieArray);
+//        readData(dbHelper.readAll());
+        return rootView;
+    }
+
+    private void fillGrid(Movie[] movieArray){
         movieAdapter = new MovieAdapter(getActivity(), Arrays.asList(movieArray));
         // Populate grid view
         gridView.setAdapter(movieAdapter);
-
-        return rootView;
     }
+
     public class FetchDataTask extends AsyncTask<String, Void, Movie[]> {
 
         private final String LOG_TAG = FetchDataTask.class.getSimpleName();
@@ -83,13 +93,13 @@ public class MainFragment extends Fragment {
                 // constants of api parameters
                 final String BASE_URL = "https://api.themoviedb.org/3/discover/movie";
                 final String API_KEY_PARAM = "api_key";
-                final String SORT_BY_PARAM = "sort_by";
+//                final String SORT_BY_PARAM = "sort_by";
                 final String APIKEY = "";
 
                 // Build the URI to pass in for movie information
                 Uri builder = Uri.parse(BASE_URL).buildUpon()
                         .appendQueryParameter(API_KEY_PARAM, APIKEY)
-                        .appendQueryParameter(SORT_BY_PARAM, params[0])
+//                        .appendQueryParameter(SORT_BY_PARAM, params[0])
                         .build();
 
                 // Create URL to pass in for movie information
@@ -156,11 +166,18 @@ public class MainFragment extends Fragment {
                 movieValuesArray[i].put(Contract.MovieEntry.COLUMN_IMAGE, moviesArray[i].releaseDate);
                 movieValuesArray[i].put(Contract.MovieEntry.COLUMN_IMAGE, moviesArray[i].avgRating);
                 movieValuesArray[i].put(Contract.MovieEntry.COLUMN_IMAGE, moviesArray[i].plot);
+                getActivity().getContentResolver().update(Contract.MovieEntry.CONTENT_URI,
+                        movieValuesArray[i],
+                        null,
+                        null);
             }
             try {
                 // bulkInsert our ContentValues array
-                getActivity().getContentResolver().bulkInsert(Contract.MovieEntry.CONTENT_URI,
-                        movieValuesArray);
+//                getActivity().getContentResolver().bulkInsert(Contract.MovieEntry.CONTENT_URI,
+//                        movieValuesArray);
+
+                // update the grid of movies
+                fillGrid(moviesArray);
             } catch (Exception e){
                 Log.e(LOG_TAG, "database broke");
 
