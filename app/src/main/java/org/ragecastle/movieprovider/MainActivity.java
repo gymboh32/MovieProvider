@@ -52,13 +52,11 @@ public class MainActivity extends AppCompatActivity {
                 // constants of api parameters
                 final String BASE_URL = "https://api.themoviedb.org/3/discover/movie";
                 final String API_KEY_PARAM = "api_key";
-//                final String SORT_BY_PARAM = "sort_by";
-                final String APIKEY = "b7a9ab2c1f215f3bb13a14d2dca30f56";
+                final String APIKEY = "";
 
                 // Build the URI to pass in for movie information
                 Uri builder = Uri.parse(BASE_URL).buildUpon()
                         .appendQueryParameter(API_KEY_PARAM, APIKEY)
-//                        .appendQueryParameter(SORT_BY_PARAM, params[0])
                         .build();
 
                 // Create URL to pass in for movie information
@@ -115,31 +113,31 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Movie[] moviesArray) {
 
-            ContentValues[] movieValuesArray = new ContentValues[moviesArray.length];
+            ContentValues movieValues;
             // Loop through static array of Flavors, add each to an instance of ContentValues
             // in the array of ContentValues
             for (int i = 0; i < moviesArray.length; i++) {
-                movieValuesArray[i] = new ContentValues();
-                movieValuesArray[i].put(Contract.MovieEntry.COLUMN_TITLE, moviesArray[i].title);
-                movieValuesArray[i].put(Contract.MovieEntry.COLUMN_IMAGE, moviesArray[i].image);
-                movieValuesArray[i].put(Contract.MovieEntry.COLUMN_IMAGE, moviesArray[i].releaseDate);
-                movieValuesArray[i].put(Contract.MovieEntry.COLUMN_IMAGE, moviesArray[i].avgRating);
-                movieValuesArray[i].put(Contract.MovieEntry.COLUMN_IMAGE, moviesArray[i].plot);
-                getContentResolver().update(Contract.MovieEntry.CONTENT_URI,
-                        movieValuesArray[i],
+                movieValues = new ContentValues();
+                movieValues.put(Contract.MovieEntry.COLUMN_MOVIE_ID, moviesArray[i].id);
+                movieValues.put(Contract.MovieEntry.COLUMN_TITLE, moviesArray[i].title);
+                movieValues.put(Contract.MovieEntry.COLUMN_IMAGE, moviesArray[i].image);
+                movieValues.put(Contract.MovieEntry.COLUMN_RELEASE_DATE, moviesArray[i].releaseDate);
+                movieValues.put(Contract.MovieEntry.COLUMN_AVG_RATING, moviesArray[i].avgRating);
+                movieValues.put(Contract.MovieEntry.COLUMN_PLOT, moviesArray[i].plot);
+
+                // array to filter columns being queried
+                String[] projection = {Contract.MovieEntry.COLUMN_MOVIE_ID};
+                // Check if the value is already in the database before adding it
+                if (getContentResolver().query(
+                        Contract.MovieEntry.CONTENT_URI.buildUpon().appendPath(moviesArray[i].id).build(),
+                        projection,
                         null,
-                        null);
-            }
-            try {
-                // bulkInsert our ContentValues array
-//                getActivity().getContentResolver().bulkInsert(Contract.MovieEntry.CONTENT_URI,
-//                        movieValuesArray);
-
-//                // update the grid of movies
-//                fillGrid(moviesArray);
-            } catch (Exception e){
-                Log.e(LOG_TAG, "database broke");
-
+                        null,
+                        null).getCount() == 0){
+                    Log.i(LOG_TAG, "Added " + moviesArray[i].title);
+                    // add the movie to the database
+                    getContentResolver().insert(Contract.MovieEntry.CONTENT_URI, movieValues);
+                }
             }
         }
     }

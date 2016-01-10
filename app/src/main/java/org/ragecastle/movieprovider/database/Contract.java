@@ -23,6 +23,7 @@ public class Contract {
         public static final String TABLE_MOVIES = "movie";
         // columns
         public static final String _ID = "_id";
+        public static final String COLUMN_MOVIE_ID = "movie_id";
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_IMAGE = "image";
         public static final String COLUMN_RELEASE_DATE = "releaseDate";

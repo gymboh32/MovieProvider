@@ -17,7 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //name & version
     private static final String DATABASE_NAME = "movies.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 5;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -29,6 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " +
                 Contract.MovieEntry.TABLE_MOVIES + "(" +
                 Contract.MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                Contract.MovieEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL, " +
                 Contract.MovieEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
                 Contract.MovieEntry.COLUMN_IMAGE + " TEXT NOT NULL, " +
                 Contract.MovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +

@@ -60,7 +60,7 @@ public class Provider extends ContentProvider {
         switch(sUriMatcher.match(uri)){
             // All Flavors selected
             case MOVIE:{
-                retCursor = mOpenHelper.getReadableDatabase().query(
+                retCursor = mOpenHelper.getWritableDatabase().query(
                         Contract.MovieEntry.TABLE_MOVIES,
                         projection,
                         selection,
@@ -75,7 +75,7 @@ public class Provider extends ContentProvider {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         Contract.MovieEntry.TABLE_MOVIES,
                         projection,
-                        Contract.MovieEntry._ID + " = ?",
+                        Contract.MovieEntry.COLUMN_MOVIE_ID + " = ?",
                         new String[] {String.valueOf(ContentUris.parseId(uri))},
                         null,
                         null,
